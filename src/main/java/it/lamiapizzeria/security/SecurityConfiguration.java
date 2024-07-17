@@ -7,7 +7,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-Configurations
+@Configurations
 
 public class SecurityConfiguration {
 
@@ -19,7 +19,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/admin").hasAuthority("ADMIN")
                 .requestMatchers("/").permitAll()
                 .and().formLogin()
-                .and().logout()
+                .and().logout();
         return http.build();
     }
 
