@@ -16,6 +16,7 @@ public class DatabaseUserDetails implements UserDetails {
     private final String username;
     private final String password;
     private final Set<GrantedAuthority> authorities;
+
     public DatabaseUserDetails(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
@@ -29,7 +30,7 @@ public class DatabaseUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities;
     }
 
     @Override

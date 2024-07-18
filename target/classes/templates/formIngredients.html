@@ -12,18 +12,20 @@
 <body>
 <div th:replace="~{fragment.html::header-block}"></div>
 <div class="container p-5">
-    <h1 class="mt-5 fs-2 text-center" th:text="${up}? 'Modifica Ingredienti:' : 'inserisci ingrediente:'"> </h1>
-    <div class=" d-flex align-items-center position-absolute top-50 start-50 translate-middle">
+    <h1 class="mt-5 fs-2 text-center" th:text="${up}? 'Modifica Ingrediente:' : 'inserisci ingrediente:'"> </h1>
+    <div class=" d-flex align-items-center position-absolute top-50 start-50 translate-middle" >
 
-        <form class="mx-auto p-2" style="width: 200px;" id="form-insert" th:object="${ingredients}" th:action="${up} ? @{/formIngredients/{id}(id = ${ingredients.id})} : @{/index/formIngredients}"
+        <form class="mx-auto p-2" style="width: 200px;" id="form-insert" th:object="${ingredientNew}" th:action="${up}?@{/index/formIngredients/{id}/add(id=${pizzaId})}:@{/index/formIngredients}"
               method="post" >
 
-            <label for="name">nome:</label>
-            <input type="text" id="name" th:field="${ingredients.name}" th:errorClass="is-invalid">
-            <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+            <select class="form-select" aria-label="Default select example" th:field="*{id}" th:errorClass="is-invalid" >
+                <option th:each="ingredient: ${ingredients}"  th:value="${ingredient.id}" th:text="${ingredient.name}"></option>
+            </select>
+
+            <div th:if="${#fields.hasErrors('id')}" class="invalid-feedback">
 
                 <ul>
-                    <li th:each="err: ${#fields.errors('name')}" th:text="${err}"></li>
+                    <li th:each="err: ${#fields.errors('id')}" th:text="${err}"></li>
                 </ul>
             </div>
             <button type="submit" class="mt-2 btn btn-primary">invia</button>

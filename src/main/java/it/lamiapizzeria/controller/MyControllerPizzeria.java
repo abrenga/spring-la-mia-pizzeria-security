@@ -199,17 +199,21 @@ public class MyControllerPizzeria {
 
     @GetMapping("/index/formIngredients/{id}/add")
     public String addIngredients(@PathVariable(name = "id") Integer id, Model model) {
-
+        model.addAttribute("pizzaId", id);
         model.addAttribute("ingredients", IngredientsRepository.findAll());
         model.addAttribute("up", true);
+        model.addAttribute("ingredientNew", new Ingredients());
 
-        return "formSpecialPrice"; // <-- form per lo special price, non penso possa funzionare con gli ingredienti
+        return "formIngredients";
     }
 
     @PostMapping("/index/formIngredients/{id}/add")
-    public String misorottaIlcazzo(@PathVariable(name="id")Integer id, @RequestParam(name="idIngredients") Integer id_ingredient,BindingResult bindingResult,@ModelAttribute("ingredients") Ingredients ingredient){
-    ModelofmenuDB pizza = repository.getReferenceById(id);
-    Ingredients ingredients = IngredientsRepository.findById(id_ingredient).get();
+    public String addIngredient(@PathVariable(name="id")Integer id, @ModelAttribute("ingredients") Ingredients ingredient, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return "redirect:/index/formIngredients";
+        }
+        ModelofmenuDB pizza = repository.getReferenceById(id);
+    Ingredients ingredients = IngredientsRepository.findById(ingredient.getId()).get();
         pizza.getIngredienst().add(ingredient);
         repository.save(pizza);
         return "redirect:/index/administration";
