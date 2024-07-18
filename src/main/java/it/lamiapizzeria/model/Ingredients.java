@@ -40,5 +40,13 @@ public class Ingredients {
     @ManyToMany(mappedBy="Ingredients")
     public List<ModelofmenuDB> menu;
 
+    public List<ModelofmenuDB> getMenu() {
+        return menu;
+    }
+
+    public void setMenu(List<ModelofmenuDB> menu) {
+        this.menu = menu;
+    }
+
 }
 

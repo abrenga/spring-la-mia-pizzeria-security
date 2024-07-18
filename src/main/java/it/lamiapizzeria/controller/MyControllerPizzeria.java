@@ -191,6 +191,15 @@ public class MyControllerPizzeria {
         specialPriceRepo.save(specialPrice);
        return   "redirect:/index/administration";
     }
+
+    /*Ingredients */
+
+
+
+ 
+    }
+    
+
         
     
     
