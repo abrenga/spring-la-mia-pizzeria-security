@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="spring-la-mia-pizzeria-relazioni" />
+        <module name="libreria" />
         <module name="lamiapizzeria" />
       </profile>
     </annotationProcessing>
@@ -14,6 +15,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="lamiapizzeria" options="-parameters" />
+      <module name="libreria" options="-parameters" />
       <module name="spring-la-mia-pizzeria-relazioni" options="-parameters" />
     </option>
   </component>
