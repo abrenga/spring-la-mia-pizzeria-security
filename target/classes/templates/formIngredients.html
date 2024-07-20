@@ -15,7 +15,7 @@
     <h1 class="mt-5 fs-2 text-center" th:text="${up}? 'Modifica Ingrediente:' : 'inserisci ingrediente:'"> </h1>
     <div class=" d-flex align-items-center position-absolute top-50 start-50 translate-middle" >
 
-        <form class="mx-auto p-2" style="width: 200px;" id="form-insert" th:object="${ingredientNew}" th:action="${up}?@{/index/formIngredients/{id}/add(id=${pizzaId})}:@{/index/formIngredients}"
+        <form class="mx-auto p-2" style="width: 200px;" id="form-insert" th:object="${up}?${ingredientNew} : ${ingredients.getId()}"    th:action="${up}?@{/index/formIngredients/{id}/add(id=${pizzaId})}:@{/index/formIngredients/{id}/update(id=${pizzaId})}"
               method="post" >
 
             <select class="form-select" aria-label="Default select example" th:field="*{id}" th:errorClass="is-invalid" >
