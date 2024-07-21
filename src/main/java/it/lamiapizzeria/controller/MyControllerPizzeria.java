@@ -3,6 +3,7 @@ package it.lamiapizzeria.controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import it.lamiapizzeria.model.Ingredients;
 import it.lamiapizzeria.repository.IngredientsRepository;
@@ -36,6 +37,8 @@ public class MyControllerPizzeria {
 
     @Autowired
     private IngredientsRepository IngredientsRepository;
+    @Autowired
+    private IngredientsRepository ingredientsRepository;
 
     @GetMapping("index")
     public String populateMenu(@RequestParam(name = "name", required = false) String name, Model model) {
@@ -84,7 +87,7 @@ public class MyControllerPizzeria {
 
     @PostMapping("/index/form")
     public String FormDb(@Valid @ModelAttribute("menu") ModelofmenuDB menu, BindingResult bindingResult,
-            Model model) {
+                         Model model) {
 
         if (bindingResult.hasErrors()) {
             return "redirect:/index/form";
@@ -101,7 +104,7 @@ public class MyControllerPizzeria {
         model.addAttribute("pizze", pizze);
         /*Ingredients*/
 
- /*special price*/
+        /*special price*/
         List<PizzaDiAmministrazione> pizzaDiAmministrazione = new ArrayList<PizzaDiAmministrazione>();
         for (int i = 0; i < pizze.size(); i++) {
             ModelofmenuDB pizza = pizze.get(i);
@@ -141,13 +144,34 @@ public class MyControllerPizzeria {
             case "specialOffer":
                 specialPriceRepo.deleteById(id);
                 break;
+            case "ingredients":
+                 deleteIngredient(id);
+                break;
         }
 
         return "redirect:/index/administration";
     }
 
+
+    private void deleteIngredient(Integer idIngredient) {
+      Optional<Ingredients>  i = ingredientsRepository.findById(idIngredient);
+      if( !i.isPresent()) {
+          return;
+      }
+
+       Ingredients ingredient = i.get();
+        List<ModelofmenuDB>  pizze = repository.findByIngredients(ingredient);
+        for (int l=0; l<pizze.size(); l++){
+            ModelofmenuDB pizza = pizze.get(l);
+            pizza.getIngredients().remove(ingredient);
+            repository.save(pizza);
+        }
+        ingredientsRepository.delete(ingredient);
+        }
+
     @GetMapping("/formSpecialPrice/{id}")
     public String specialPriceAdmin(@PathVariable(name = "id") Integer id, Model model) {
+
         model.addAttribute("specialPricelist", specialPriceRepo.getReferenceById(id));
         model.addAttribute("update", true);
 
@@ -193,9 +217,9 @@ public class MyControllerPizzeria {
     @GetMapping("/index/formIngredients/{id}/add")
     public String addIngredients(@PathVariable(name = "id") Integer id, Model model) {
         model.addAttribute("pizzaId", id);
-        model.addAttribute("ingredients", IngredientsRepository.findAllByMenu(repository.getReferenceById(id)));
+        model.addAttribute("ingredients", IngredientsRepository.findAll());
         model.addAttribute("ingredientNew", new Ingredients());
-        model.addAttribute("up", true);
+        model.addAttribute("up", false);
 
         return "formIngredients";
     }
@@ -205,38 +229,35 @@ public class MyControllerPizzeria {
         if (bindingResult.hasErrors()) {
             return "redirect:/index/formIngredients";
         }
+
         ModelofmenuDB pizza = repository.getReferenceById(id);
         Ingredients ingredients = IngredientsRepository.findById(ingredient.getId()).get();
-        pizza.getIngredienst().add(ingredient);
+        pizza.getIngredients().add(ingredient);
         repository.save(pizza);
         return "redirect:/index/administration";
     }
 
     /*Update */
-    @GetMapping("/index/formIngredients/{id}/update")
+    @GetMapping("/index/formIngredients/update/{id}")
     public String getMethodName(@PathVariable(name = "id") Integer id, Model model) {
-        model.addAttribute("pizzaId", id);
-        model.addAttribute("ingredients", IngredientsRepository.findAllByMenu(repository.getReferenceById(id)));
-        model.addAttribute("up", false);
+        model.addAttribute("ingredientId", id);
+        model.addAttribute("ingredientNew", ingredientsRepository.findById(id).get());
+        model.addAttribute("up", true);
+
         return "formIngredients";
     }
 
-    @PostMapping("/index/formIngredients/{id}/update")
-    public String getupdateIngredients(@PathVariable("id") Integer id, @Valid @ModelAttribute("ingredients") List<Ingredients> ingredient, BindingResult bindingResult) {
+    @PostMapping("/index/formIngredients/update/{id}")
+    public String getupdateIngredients(@PathVariable("id") Integer id, @Valid @ModelAttribute("ingredients") Ingredients ingredient, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "redirect:/index/formIngredients";
         }
-        ModelofmenuDB pizza = repository.getReferenceById(id);
-        for (int i = 0; i < ingredient.size(); i++) {
-            Ingredients upIngredients = ingredient.get(i);
-            pizza.getIngredienst().set(upIngredients.getId(), upIngredients);
-
-        }
-
-        repository.save(pizza);
+        IngredientsRepository.save(ingredient);
 
         return "redirect:/index/administration";
-
     }
+
+    /*delete*/
+
 
 }

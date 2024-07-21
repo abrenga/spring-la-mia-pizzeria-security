@@ -37,7 +37,7 @@ public class Ingredients {
         this.name = name;
     }
 
-    @ManyToMany(mappedBy="Ingredients")
+    @ManyToMany(mappedBy="ingredients")
     public List<ModelofmenuDB> menu;
 
 }

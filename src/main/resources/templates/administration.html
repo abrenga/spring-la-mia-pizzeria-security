@@ -82,7 +82,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a th:href="@{/index/formIngredients/{id}/update(id=${ingredient.getId()})}">
+                                            <a th:href="@{/index/formIngredients/update/{id}(id=${ingredient.getId()})}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                      fill="currentColor"
                                                      class="bi bi-pencil" viewBox="0 0 16 16">
@@ -91,7 +91,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <form class="col" method="post">
+                                            <form class="col" method="post" th:action="@{/ingredients/delete/{id}(id=${pizza.nomePizzaAmministratore.getId()})}">
                                                 <button>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                          fill="currentColor"

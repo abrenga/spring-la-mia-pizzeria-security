@@ -49,7 +49,7 @@ public class ModelofmenuDB{
 	joinColumns=@JoinColumn(name="pizza_id"),
 	inverseJoinColumns=@JoinColumn(name="ingredients_id")
 )
-private List<Ingredients> Ingredients;
+private List<Ingredients> ingredients;
 
 
 	public Integer getId() {
@@ -96,16 +96,16 @@ private List<Ingredients> Ingredients;
         return specialPrice;
     }
 
-    public List<Ingredients> getIngredienst() {
-        return Ingredients;
+    public List<Ingredients> getIngredients() {
+        return ingredients;
     }
 
     public void setSpecialPrice(List<ModelOfSpecialPrice> specialPrice) {
         this.specialPrice = specialPrice;
     }
 
-    public void setIngredienst(List<Ingredients> ingredienst) {
-        this.Ingredients = ingredienst;
+    public void setIngredients(List<Ingredients> ingredients) {
+        this.ingredients = ingredients;
     }
 
 
